@@ -13,8 +13,8 @@ class triornot():
 
         p2 = pathlib.Path('./src/src/config.yaml')
         with open(p2,'r') as f:
-            self.cfg = yaml.load(f, Loader=yaml.FullLoader)
+            self.cfg = yaml.safe_load(f)
 
-        self.logger.info('Hello world!')
+        self.logger.debug(self.cfg)
 
 tri = triornot()
