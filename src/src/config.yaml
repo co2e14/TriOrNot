@@ -1,1 +1,4 @@
-file: ../test/triangles.res
+resfile: ./src/tests/triangles.res
+triangle:
+  side: 6
+  error: 0.50
