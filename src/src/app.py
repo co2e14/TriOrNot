@@ -83,6 +83,10 @@ class triornot():
         self.logger.debug(f'added {list(self.G).__len__()} nodes to graph.')
 
     def pruneGraph(self) -> None:
+        """
+        Note that nx.find_cycle only returns the FIRST cycle it finds, not ALL.
+        So, look, report, delete node, then check again for another cycle. 
+        """
         while len(list(self.G)) > 0:
             try:
                 cycle = nx.find_cycle(self.G)
@@ -92,7 +96,7 @@ class triornot():
                 
             nodes = len(list(cycle))
             if nodes == 3:
-                self.logger.info(f'Triangle found: {cycle[0][0],cycle[1][0],cycle[2][0]} !!!' )
+                self.logger.info(f'Triangle found: {cycle[0][0],cycle[1][0],cycle[2][0]}!!!' )
             else:
                 self.logger.debug(f'Found a polygon with more edges than three. Cool, but do not want.')
             
