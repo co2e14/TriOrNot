@@ -10,7 +10,7 @@ class triornot():
         with open(p,'r') as f:
             logconf = yaml.safe_load(f)
         logging.config.dictConfig(logconf)
-        self.logger = logging.getLogger('simpleExample')
+        self.logger = logging.getLogger('TriOrNot')
 
         p = pathlib.Path('./src/src/config.yaml')
         with open(p,'r') as f:
