@@ -15,7 +15,8 @@ class triornot():
         p = pathlib.Path('./src/src/config.yaml')
         with open(p,'r') as f:
             self.cfg = yaml.safe_load(f)
-
+            
+        self.G = nx.Graph()
         self.logger.debug(self.cfg)
 
     def readResFile(self) -> None:
@@ -75,6 +76,30 @@ class triornot():
         self.hits = hits.sort_values(by='dist').reset_index(drop=True)
         self.logger.debug(self.hits)
 
+    def buildGraph(self) -> None:
+        for i,_ in enumerate(self.hits.index):
+            a,b,_ = self.hits.iloc[i].values
+            self.G.add_edges_from([(a,b)])
+        self.logger.debug(f'added {list(self.G).__len__()} nodes to graph.')
+
+    def pruneGraph(self) -> None:
+        while len(list(self.G)) > 0:
+            try:
+                cycle = nx.find_cycle(self.G)
+            except:
+                self.logger.info(f'No more cyclical graphs found; exiting.')
+                break
+                
+            nodes = len(list(cycle))
+            if nodes == 3:
+                self.logger.info(f'Triangle found: {cycle[0][0],cycle[1][0],cycle[2][0]} !!!' )
+            else:
+                self.logger.debug(f'Found a polygon with more edges than three. Cool, but do not want.')
+            
+            self.logger.debug(f'Removing node {cycle[0][0]} to break current cycle.')
+            self.G.remove_node(cycle[0][0])
+
+
     def report(self):
         pass
 
@@ -86,4 +111,6 @@ tri.extractSG()
 tri.makeCombinations()
 tri.getDistBetweenNodes()
 tri.rejectOutliers()
+tri.buildGraph()
+tri.pruneGraph()
 #tri.report()
