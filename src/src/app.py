@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import itertools, yaml, sys, pathlib
 import logging, logging.config
+import networkx as nx
 
 class triornot():
     def __init__(self) -> None:
@@ -17,7 +18,7 @@ class triornot():
 
         self.logger.debug(self.cfg)
 
-    def readResFile(self):
+    def readResFile(self) -> None:
         p = pathlib.Path(self.cfg['resfile'])
         self.df = pd.read_csv(p, sep='\s+', skiprows=8, engine='python',
                  names=['atom','b','x','y','z','f','g'], index_col='atom')
@@ -26,7 +27,7 @@ class triornot():
         self.df = self.df.drop(axis=0, index=['HKLF','END'])
         self.logger.debug(self.df)
 
-    def extractSG(self):
+    def extractSG(self) -> None:
         p = pathlib.Path(self.cfg['resfile'])
         with open(p,'r') as f:
             string = f.readlines()
@@ -42,10 +43,10 @@ class triornot():
         self.sg = sg
         self.logger.debug(sg)
 
-    def makeCombinations(self):
+    def makeCombinations(self) -> None:
         self.listToCheck = itertools.combinations(self.df.index,2)
 
-    def calc(self,sg,pair):
+    def calc(self,sg:dict,pair:list) -> float:
         delta = self.df.loc[pair[0]] - self.df.loc[pair[1]]
 
         d2 = (delta['x'] * sg['a'])**2 + \
@@ -57,14 +58,14 @@ class triornot():
 
         return d2**(1/2)
     
-    def findTriangles(self):
+    def findTriangles(self) -> None:
         dist = []
         for i in self.listToCheck:
             dist.append([i[0], i[1], self.calc(self.sg,i)])
         self.dfdist = pd.DataFrame(dist,columns=['atom1','atom2','dist'])
         self.logger.debug(self.dfdist)
 
-    def rejectNonTriangles(self):
+    def rejectNonTriangles(self) -> None:
         triangle = self.cfg['triangle']
         min, max = triangle['side']-triangle['error'],\
                    triangle['side']+triangle['error']
