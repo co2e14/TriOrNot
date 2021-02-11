@@ -58,14 +58,14 @@ class triornot():
 
         return d2**(1/2)
     
-    def findTriangles(self) -> None:
+    def getDistBetweenNodes(self) -> None:
         dist = []
         for i in self.listToCheck:
             dist.append([i[0], i[1], self.calc(self.sg,i)])
         self.dfdist = pd.DataFrame(dist,columns=['atom1','atom2','dist'])
         self.logger.debug(self.dfdist)
 
-    def rejectNonTriangles(self) -> None:
+    def rejectOutliers(self) -> None:
         triangle = self.cfg['triangle']
         min, max = triangle['side']-triangle['error'],\
                    triangle['side']+triangle['error']
@@ -84,6 +84,6 @@ tri = triornot()
 tri.readResFile()
 tri.extractSG()
 tri.makeCombinations()
-tri.findTriangles()
-tri.rejectNonTriangles()
+tri.getDistBetweenNodes()
+tri.rejectOutliers()
 #tri.report()
