@@ -134,7 +134,8 @@ class triornot():
         '''
         Could be used to clean up results. Not in use.
         '''
-        pass
+        print(self.dfdist)
+        self.dfdist.to_csv(path_or_buf="out.csv")
 
     
 
@@ -143,7 +144,7 @@ tri.readResFile()
 tri.extractCell()
 tri.makeCombinations()
 tri.getDistBetweenNodes()
-tri.rejectOutliers()
-tri.buildGraph()
-tri.pruneGraph()
-#tri.report()
+#tri.rejectOutliers()
+#tri.buildGraph()
+#tri.pruneGraph()
+tri.report()

@@ -1,4 +1,4 @@
-resfile: ./src/tests/triangles.res
+resfile: ./src/tests/test_fa.res
 triangle:
   side: 6
   error: 0.50
