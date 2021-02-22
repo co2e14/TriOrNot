@@ -78,7 +78,9 @@ class triornot():
         for i in self.listToCheck:
             dist.append([i[0], i[1], self.calc(self.cell,i)])
         self.dfdist = pd.DataFrame(dist,columns=['atom1','atom2','dist'])
-        self.logger.debug(self.dfdist)
+        self.dfdist.sort_values(by=['dist'], axis=0, inplace=True)
+        self.dfdist.drop(self.dfdist.loc[self.dfdist['dist']>=25].index, inplace=True)
+        #self.logger.debug(self.dfdist)
 
     def rejectOutliers(self) -> None:
         '''
